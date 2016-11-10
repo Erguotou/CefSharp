@@ -3,6 +3,7 @@
 // Use of this source code is governed by a BSD-style license that can be found in the LICENSE file.
 
 #pragma once
+#include <msclr\appdomain.h>
 
 #include "include/cef_app.h"
 #include "CefSettings.h"
@@ -14,11 +15,13 @@ namespace CefSharp
     {
         gcroot<CefSettings^> _cefSettings;
         gcroot<Action^> _onContextInitialized;
+        int _appdomainId;
 
     public:
         CefSharpApp(CefSettings^ cefSettings, Action^ onContextInitialized) :
             _cefSettings(cefSettings),
-            _onContextInitialized(onContextInitialized)
+            _onContextInitialized(onContextInitialized),
+            _appdomainId(System::AppDomain::CurrentDomain->Id)
         {
         }
 
@@ -33,14 +36,25 @@ namespace CefSharp
             return this;
         }
 
-        virtual void OnContextInitialized() OVERRIDE
+        static void callback(CefSharpApp *me)
         {
-            if (static_cast<Action^>(_onContextInitialized) != nullptr)
+            if (static_cast<Action^>(me->_onContextInitialized) != nullptr)
             {
-                _onContextInitialized->Invoke();
+                me->_onContextInitialized->Invoke();
             }
         }
-        
+
+        virtual void OnContextInitialized() OVERRIDE
+        {
+            msclr::call_in_appdomain(_appdomainId, &callback, this);
+            //msclr::call_in_appdomain(_appdomainId, [](CefSharpApp *me) {
+            //    if (static_cast<Action^>(me->_onContextInitialized) != nullptr)
+            //    {
+            //        me->_onContextInitialized->Invoke();
+            //    }
+            //}, this);
+        }
+
         virtual void OnBeforeCommandLineProcessing(const CefString& process_type, CefRefPtr<CefCommandLine> command_line) OVERRIDE
         {
             if(_cefSettings->CefCommandLineArgs->Count == 0)

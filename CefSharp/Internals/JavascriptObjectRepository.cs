@@ -57,6 +57,12 @@ namespace CefSharp.Internals
             RootObject = new JavascriptRootObject();
         }
 
+        public void Clear()
+        {
+            objects.Clear();
+            cache.Clear();
+        }
+
         private JavascriptObject CreateJavascriptObject(bool camelCaseJavascriptNames, Func<MemberInfo, bool> predicate)
         {
             long id;

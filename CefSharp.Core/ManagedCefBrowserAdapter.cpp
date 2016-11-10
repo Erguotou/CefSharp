@@ -358,6 +358,7 @@ void ManagedCefBrowserAdapter::Reload(bool ignoreCache)
 
     if (cefBrowser != nullptr)
     {
+        _javaScriptObjectRepository->Clear();
         if (ignoreCache)
         {
             cefBrowser->ReloadIgnoreCache();

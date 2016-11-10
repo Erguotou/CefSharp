@@ -21,7 +21,7 @@ namespace CefSharp
 
             try
             {
-                array<Byte>^ buffer = gcnew array<Byte>(n * size);
+               auto buffer = gcnew cli::array<Byte>(n * size);
                 int ret = _stream->Read(buffer, 0, n);
                 pin_ptr<Byte> src = &buffer[0];
                 memcpy(ptr, static_cast<void*>(src), ret);

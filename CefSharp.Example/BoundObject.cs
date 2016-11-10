@@ -12,6 +12,8 @@ namespace CefSharp.Example
         public Type MyUnconvertibleProperty { get; set; }
         public SubBoundObject SubObject { get; set; }
 
+        public double MyDoubleProperty { get; set; }
+
         public SubBoundObject[] MyObjects
         {
             get
@@ -50,6 +52,7 @@ namespace CefSharp.Example
             MyUintArray = new uint[] { 7, 8 };
             MyIntArray = new[] { 1, 2, 3, 4, 5, 6, 7, 8 };
             MyUintList = new List<uint>(MyUintArray);
+            MyDoubleProperty = 2452903544;
         }
 
         public void TestCallback(IJavascriptCallback javascriptCallback)
