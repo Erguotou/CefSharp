@@ -18,6 +18,7 @@ namespace CefSharp.Internals
     [KnownType(typeof(float[]))]
     [KnownType(typeof(double[]))]
     [KnownType(typeof(string[]))]
+    [KnownType(typeof(JavascriptObject[]))]
     public class BrowserProcessResponse
     {
         [DataMember]

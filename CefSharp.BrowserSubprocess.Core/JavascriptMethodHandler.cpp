@@ -5,6 +5,7 @@
 #include "Stdafx.h"
 #include "TypeUtils.h"
 #include "JavascriptMethodHandler.h"
+#include "JavascriptObjectWrapper.h"
 
 namespace CefSharp
 {
@@ -53,31 +54,9 @@ namespace CefSharp
         auto type = obj->GetType();
 
         if (type == JavascriptObject::typeid)
-        {
-            JavascriptObject^ javascriptObject = (JavascriptObject^)obj;
-            CefRefPtr<CefV8Value> cefObject = CefV8Value::CreateObject(NULL);
-
-            for (int i = 0; i < javascriptObject->Properties->Count; i++)
-            {
-                auto prop = javascriptObject->Properties[i];
-
-                if (prop->IsComplexType)
-                {
-                    auto v8Value = ConvertToCefObject(prop->JsObject);
-
-                    cefObject->SetValue(StringUtils::ToNative(prop->JavascriptName), v8Value, CefV8Value::PropertyAttribute::V8_PROPERTY_ATTRIBUTE_NONE);
-                }
-                else
-                {
-                    auto v8Value = TypeUtils::ConvertToCef(prop->PropertyValue, nullptr);
-
-                    cefObject->SetValue(StringUtils::ToNative(prop->JavascriptName), v8Value, CefV8Value::PropertyAttribute::V8_PROPERTY_ATTRIBUTE_NONE);
-                }
-            }
-
-            return cefObject;
-        }
-
+            return JavascriptObjectWrapper::Wrap(_browserProcess, safe_cast<JavascriptObject^>(obj), _callbackRegistry);
+        else if (type->IsArray && type->GetElementType() == JavascriptObject::typeid)
+            return JavascriptObjectWrapper::Wrap(_browserProcess, safe_cast<Array^>(obj), _callbackRegistry);
         return TypeUtils::ConvertToCef(obj, nullptr);
     }
 }

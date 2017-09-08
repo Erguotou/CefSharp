@@ -99,19 +99,19 @@ void ManagedCefBrowserAdapter::Resize(int width, int height)
     }
 }
 
-void ManagedCefBrowserAdapter::RegisterJsObject(String^ name, Object^ object, bool lowerCaseJavascriptNames)
+void ManagedCefBrowserAdapter::RegisterJsObject(String^ name, Object^ object, bool lowerCaseJavascriptNames, Func<MemberInfo^, bool>^ predicate)
 {
     if (!CefSharpSettings::WcfEnabled)
     {
         throw gcnew InvalidOperationException("To enable synchronous JS bindings set WcfEnabled true in CefSettings during initialization.");
     }
 
-    _javaScriptObjectRepository->Register(name, object, lowerCaseJavascriptNames);
+    _javaScriptObjectRepository->Register(name, object, lowerCaseJavascriptNames, predicate);
 }
 
-void ManagedCefBrowserAdapter::RegisterAsyncJsObject(String^ name, Object^ object, bool lowerCaseJavascriptNames)
+void ManagedCefBrowserAdapter::RegisterAsyncJsObject(String^ name, Object^ object, bool lowerCaseJavascriptNames, Func<MemberInfo^, bool>^ predicate)
 {
-    _javaScriptObjectRepository->RegisterAsync(name, object, lowerCaseJavascriptNames);
+    _javaScriptObjectRepository->RegisterAsync(name, object, lowerCaseJavascriptNames, predicate);
 }
 
 IBrowser^ ManagedCefBrowserAdapter::GetBrowser(int browserId)

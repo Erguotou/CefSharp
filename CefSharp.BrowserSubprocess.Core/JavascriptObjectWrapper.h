@@ -21,18 +21,16 @@ namespace CefSharp
     {
     private:
         List<JavascriptMethodWrapper^>^ _wrappedMethods;
-        List<JavascriptPropertyWrapper^>^ _wrappedProperties;
         IBrowserProcess^ _browserProcess;
         MCefRefPtr<JavascriptPropertyHandler> _jsPropertyHandler;
         int64 _objectId;
+        JavascriptCallbackRegistry^ _callbackRegistry;
+
+		static Dictionary<int64, JavascriptCallbackWrapper^>^ _allWrappedObjects = gcnew Dictionary<int64, JavascriptCallbackWrapper^>(); // will not remove objects because v8 won't tell us when it's done using it
 
     public:
-        JavascriptObjectWrapper(IBrowserProcess^ browserProcess)
+        JavascriptObjectWrapper(IBrowserProcess^ browserProcess) : _browserProcess(browserProcess), _wrappedMethods(gcnew List<JavascriptMethodWrapper^>())
         {
-            _browserProcess = browserProcess;
-
-            _wrappedMethods = gcnew List<JavascriptMethodWrapper^>();
-            _wrappedProperties = gcnew List<JavascriptPropertyWrapper^>();
         }
 
         !JavascriptObjectWrapper()
@@ -48,14 +46,19 @@ namespace CefSharp
             {
                 delete var;
             }
-            for each (JavascriptPropertyWrapper^ var in _wrappedProperties)
-            {
-                delete var;
-            }
+            _wrappedMethods->Clear();
+            delete _wrappedMethods;		
         }
 
-        void Bind(JavascriptObject^ object, const CefRefPtr<CefV8Value>& v8Value, JavascriptCallbackRegistry^ callbackRegistry);
+        void Bind(JavascriptObject^ object, CefRefPtr<CefV8Value>& v8Value, JavascriptCallbackRegistry^ callbackRegistry);
         BrowserProcessResponse^ GetProperty(String^ memberName);
         BrowserProcessResponse^ SetProperty(String^ memberName, Object^ value);
+
+        static CefRefPtr<CefV8Value> Wrap(IBrowserProcess^ , JavascriptObject^ , JavascriptCallbackRegistry^ );
+        static CefRefPtr<CefV8Value> Wrap(IBrowserProcess^ , Array^ , JavascriptCallbackRegistry^ );
+		static void ClearAll() 
+		{
+			_allWrappedObjects->Clear();
+		}
     };
 }

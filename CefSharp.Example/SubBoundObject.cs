@@ -22,5 +22,7 @@ namespace CefSharp.Example
 		{
 			return SimpleProperty;
 		}
-	}
+        // setting Parent will cause stack overflow if not for late binding
+        public BoundObject Parent { get; set; }
+    }
 }

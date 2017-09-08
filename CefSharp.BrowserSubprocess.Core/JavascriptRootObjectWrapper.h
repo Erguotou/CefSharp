@@ -60,6 +60,7 @@ namespace CefSharp
 
         ~JavascriptRootObjectWrapper()
         {
+			JavascriptObjectWrapper::ClearAll();
             if (_callbackRegistry != nullptr)
             {
                 delete _callbackRegistry;
@@ -87,7 +88,7 @@ namespace CefSharp
 
         bool TryGetAndRemoveMethodCallback(int64 id, JavascriptAsyncMethodCallback^% callback);
 
-        void Bind(JavascriptRootObject^ rootObject, JavascriptRootObject^ asyncRootObject, const CefRefPtr<CefV8Value>& v8Value);
+        void Bind(JavascriptRootObject^ rootObject, JavascriptRootObject^ asyncRootObject, CefRefPtr<CefV8Value>& v8Value);
     };
 }
 

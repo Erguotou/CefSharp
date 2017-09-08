@@ -14,12 +14,14 @@ namespace CefSharp
     private:
         gcroot<Func<array<Object^>^, BrowserProcessResponse^>^> _method;
         gcroot<JavascriptCallbackRegistry^> _callbackRegistry;
+        gcroot<IBrowserProcess^> _browserProcess;
 
     public:
-        JavascriptMethodHandler(Func<array<Object^>^, BrowserProcessResponse^>^ method, JavascriptCallbackRegistry^ callbackRegistry)
+        JavascriptMethodHandler(IBrowserProcess^ browserProcess, Func<array<Object^>^, BrowserProcessResponse^>^ method, JavascriptCallbackRegistry^ callbackRegistry)
         {
             _method = method;
             _callbackRegistry = callbackRegistry;
+            _browserProcess = browserProcess;
         }
 
         ~JavascriptMethodHandler()
@@ -28,6 +30,7 @@ namespace CefSharp
             // The callback registry is a shared instance among all method handlers (async & sync).
             // It's lifecycle is managed in the JavascriptRootObjectWrapper.
             _callbackRegistry = nullptr;
+            _browserProcess = nullptr;
         }
 
         virtual bool Execute(const CefString& name, CefRefPtr<CefV8Value> object, const CefV8ValueList& arguments, CefRefPtr<CefV8Value>& retval, CefString& exception) OVERRIDE;

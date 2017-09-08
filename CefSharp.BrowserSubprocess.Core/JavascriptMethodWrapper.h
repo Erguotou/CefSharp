@@ -25,7 +25,7 @@ namespace CefSharp
         {
             _ownerId = ownerId;
             _browserProcess = browserProcess;
-            _javascriptMethodHandler = new JavascriptMethodHandler(gcnew Func<array<Object^>^, BrowserProcessResponse^>(this, &JavascriptMethodWrapper::Execute), callbackRegistry);
+            _javascriptMethodHandler = new JavascriptMethodHandler(browserProcess, gcnew Func<array<Object^>^, BrowserProcessResponse^>(this, &JavascriptMethodWrapper::Execute), callbackRegistry);
         }
 
         !JavascriptMethodWrapper()

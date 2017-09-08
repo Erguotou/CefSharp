@@ -60,6 +60,7 @@ namespace CefSharp
 
                     jsObject->Properties->Add(jsProperty);
                 }
+                jsObject->IsNull = list->GetBool(5);
                 return jsObject;
             }
 

@@ -12,7 +12,7 @@ using namespace System::Threading;
 
 namespace CefSharp
 {
-    void JavascriptRootObjectWrapper::Bind(JavascriptRootObject^ rootObject, JavascriptRootObject^ asyncRootObject, const CefRefPtr<CefV8Value>& v8Value)
+    void JavascriptRootObjectWrapper::Bind(JavascriptRootObject^ rootObject, JavascriptRootObject^ asyncRootObject, CefRefPtr<CefV8Value>& v8Value)
     {
         if (_isBound)
         {

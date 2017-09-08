@@ -36,6 +36,8 @@ namespace CefSharp
                     {
                         delete var;
                     }
+                    _wrappedMethods->Clear();
+                    delete _wrappedMethods;
                 }
 
                 void Bind(JavascriptObject^ object, const CefRefPtr<CefV8Value> &value, const CefRefPtr<CefV8Value> &promiseCreator);

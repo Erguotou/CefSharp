@@ -82,6 +82,7 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CefRenderProcess.cs" />
@@ -106,8 +107,14 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if $(PlatformName) == x86 (
-  call "$(DevEnvDir)..\tools\vsvars32.bat"
-  editbin /largeaddressaware $(TargetPath)
+  
+if exist "$(DevEnvDir)..\..\vc\vcvarsall.bat" (
+    call "$(DevEnvDir)..\..\vc\vcvarsall.bat" x86 
+) else (
+    call "$(DevEnvDir)..\..\VC\Auxiliary\Build\vcvarsall.bat" x86 
+)
+editbin /largeaddressaware $(TargetPath)
+
 )</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

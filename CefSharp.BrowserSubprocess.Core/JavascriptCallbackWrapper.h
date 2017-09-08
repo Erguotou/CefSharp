@@ -33,6 +33,11 @@ namespace CefSharp
             {
             }
 
+			JavascriptCallbackWrapper(CefRefPtr<CefV8Value> value)
+				: _value(value), _context(nullptr)
+			{
+			}
+
             !JavascriptCallbackWrapper()
             {
                 _value = nullptr;

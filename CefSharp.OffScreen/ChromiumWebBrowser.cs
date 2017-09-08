@@ -6,6 +6,7 @@ using System;
 using System.Drawing;
 using System.Threading.Tasks;
 using CefSharp.Internals;
+using System.Reflection;
 
 namespace CefSharp.OffScreen
 {
@@ -288,7 +289,7 @@ namespace CefSharp.OffScreen
             }
         }
 
-        public void RegisterJsObject(string name, object objectToBind, bool camelCaseJavascriptNames = true)
+        public void RegisterJsObject(string name, object objectToBind, bool camelCaseJavascriptNames = true, Func<MemberInfo, bool> predicate = null)
         {
             if (IsBrowserInitialized)
             {
@@ -299,17 +300,17 @@ namespace CefSharp.OffScreen
             //Enable WCF if not already enabled
             CefSharpSettings.WcfEnabled = true;
 
-            managedCefBrowserAdapter.RegisterJsObject(name, objectToBind, camelCaseJavascriptNames);
+            managedCefBrowserAdapter.RegisterJsObject(name, objectToBind, camelCaseJavascriptNames, predicate);
         }
 
-        public void RegisterAsyncJsObject(string name, object objectToBind, bool camelCaseJavascriptNames = true)
+        public void RegisterAsyncJsObject(string name, object objectToBind, bool camelCaseJavascriptNames = true, Func<MemberInfo, bool> predicate = null)
         {
             if (IsBrowserInitialized)
             {
                 throw new Exception("Browser is already initialized. RegisterJsObject must be" +
                                     "called before the underlying CEF browser is created.");
             }
-            managedCefBrowserAdapter.RegisterAsyncJsObject(name, objectToBind, camelCaseJavascriptNames);
+            managedCefBrowserAdapter.RegisterAsyncJsObject(name, objectToBind, camelCaseJavascriptNames, predicate);
         }
 
         /// <summary>

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CefSharp.Internals;
+using System.Windows.Forms;
 
 namespace CefSharp.BrowserSubprocess
 {
@@ -21,6 +22,10 @@ namespace CefSharp.BrowserSubprocess
 
             using (var subprocess = Create(args))
             {
+                //if (subprocess is CefRenderProcess)
+                //{
+                //    MessageBox.Show("Please attach debugger now", "Debug CEF process", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //}
                 result = subprocess.Run();
             }
 
@@ -31,7 +36,7 @@ namespace CefSharp.BrowserSubprocess
         private static CefSubProcess Create(IEnumerable<string> args)
         {
             const string typePrefix = "--type=";
-            var typeArgument = args.SingleOrDefault(arg => arg.StartsWith(typePrefix));
+            var typeArgument = args.SingleOrDefault(arg => arg.StartsWith(typePrefix)) ?? "";
             var wcfEnabled = args.HasArgument(CefSharpArguments.WcfEnabledArgument);
 
             var type = typeArgument.Substring(typePrefix.Length);
